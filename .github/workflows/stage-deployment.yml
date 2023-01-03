@@ -26,6 +26,10 @@ jobs:
         tags: |
           hectormedinanubosas/demo-nomad-job:latest
           hectormedinanubosas/demo-nomad-job:${{ github.sha }}
+    - name: test jq native
+      run: |
+        jq -Rsc '{JobHCL: ., Canonicalize: true}' nomad/stage/app.hcl
+    
     - name: Use JQ to get valid json to parse.
       uses: sergeysova/jq-action@v2
       id: jq
