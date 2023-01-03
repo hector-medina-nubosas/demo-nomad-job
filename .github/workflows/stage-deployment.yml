@@ -27,13 +27,12 @@ jobs:
           hectormedinanubosas/demo-nomad-job:latest
           hectormedinanubosas/demo-nomad-job:${{ github.sha }}
     - name: Get valid json from hcl file.
-      id: valid_json
       run: |
         export PAYLOAD=$(jq -Rsc '{JobHCL: ., Canonicalize: true}' nomad/stage/app.hcl)
         export PAYLOAD_JSON=$(curl -H 'Content-Type: application/json'  \
                                    -X POST http://nomad.hectormedina.es/v1/jobs/parse \
                                    -d "$payload")
-        echo "variable=$PAYLOAD_JSON" >> $GITHUB_ENV
+        echo "variable=VALOR" >> $GITHUB_ENV
     - name: Update nomad job.
       run: |
         echo ${{ env.variable }}
