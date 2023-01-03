@@ -26,19 +26,16 @@ jobs:
         tags: |
           hectormedinanubosas/demo-nomad-job:latest
           hectormedinanubosas/demo-nomad-job:${{ github.sha }}
-    - name: Get valid json from hcl file.
-      run: |
-        export payload=$(jq -Rsc '{JobHCL: ., Canonicalize: true}' nomad/stage/app.hcl)
-        echo "payload_json=$(curl -H 'Content-Type: application/json'  \
-                                   -X POST http://nomad.hectormedina.es/v1/jobs/parse \
-                                   -d \"$payload\")" >> $GITHUB_ENV
     - name: Update nomad job.
       run: |
-        echo ${{ env.payload_json }}
+        export payload=$(jq -Rsc '{JobHCL: ., Canonicalize: true}' nomad/stage/app.hcl)
+        export payload_json=$(curl -H 'Content-Type: application/json'  \
+                                   -X POST http://nomad.hectormedina.es/v1/jobs/parse \
+                                   -d "$payload")
         export http_code=$(curl -H 'Content-Type: application/json'  \
                                 -X POST \
                                 http://nomad.hectormedina.es/v1/jobs \
-                                -d "{\"Job\": ${{ env.payload_json }} }" )
+                                -d "{\"Job\": $payload_json }" )
         echo "$http_code"
         if [ "$http_code" != "200" ]
         then
