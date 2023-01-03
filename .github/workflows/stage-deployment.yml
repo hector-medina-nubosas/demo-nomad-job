@@ -34,7 +34,7 @@ jobs:
                                    -d "$payload"
         )
     - name: Update nomad job.
-      run |
+      run: |
         export http_code=$(curl --write-out '%(http_code)' --silent --output /dev/null \
                                   -H 'Content-Type: application/json'  \
                                   -X POST \
