@@ -38,12 +38,11 @@ jobs:
                                    -X POST http://nomad.hectormedina.es/v1/jobs/parse \
                                    -d "$payload")
         # Update job with json.
-        export http_code=$(curl \
+        export http_code=$(curl --write-out '%{http_code}' --silent --output /dev/null \
                                 -H 'Content-Type: application/json'  \
                                 -X POST \
                                 http://nomad.hectormedina.es/v1/job/turisapps_web_${{ env.environment }} \
                                 -d "{\"Job\": $payload_json }" )
-        echo "$http_code"
         # Check if update was successful. 
         if [ "$http_code" != "200" ]
         then
