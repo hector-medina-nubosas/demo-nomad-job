@@ -31,18 +31,16 @@ jobs:
         export payload=$(jq -Rsc '{JobHCL: ., Canonicalize: true}' nomad/stage/app.hcl)
         export payload_json=$(curl -H 'Content-Type: application/json'  \
                                    -X POST http://nomad.hectormedina.es/v1/jobs/parse \
-                                   -d "$payload"
-        )
+                                   -d "$payload")
     - name: Update nomad job.
       run: |
         export http_code=$(curl --write-out '%(http_code)' --silent --output /dev/null \
                                   -H 'Content-Type: application/json'  \
                                   -X POST \
                                   http://nomad.hectormedina.es/v1/jobs \
-                                  -d "$payload_json"
-        )
+                                  -d "{\"Job\": $payload_json }" )
         if [ "$http_code" != "200" ]
         then
-          echo "::warning::HTTP status code from grafana API: $CODE"
+          echo "::warning:: Nomad job create HTTP response code : $CODE"
         fi
 
