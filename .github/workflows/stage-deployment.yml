@@ -34,7 +34,8 @@ jobs:
                                    -d "$payload")
         echo "$payload"
         echo "$payload_json"
-        echo "::set-env name=payload_json::$payload_json"
+      env:
+        payload_json: "$payload_json"
     - name: Update nomad job.
       run: |
         echo "$payload_json"
