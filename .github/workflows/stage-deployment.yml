@@ -29,7 +29,7 @@ jobs:
     - name: Update nomad job.
       run: |
         # Prepare hcl file.
-        export payload=$(jq -Rsc  '.hectormedinanubosas/demo-nomad-job:latest = "hectormedinanubosas/demo-nomad-job:${{ github.sha }}"' '{JobHCL: ., Canonicalize: true}' nomad/stage/app.hcl)
+        export payload=$(jq -Rsc '{JobHCL: ., Canonicalize: true}' nomad/stage/app.hcl)
         # Get the json file.
         export payload_json=$(curl -H 'Content-Type: application/json'  \
                                    -X POST http://nomad.hectormedina.es/v1/jobs/parse \
