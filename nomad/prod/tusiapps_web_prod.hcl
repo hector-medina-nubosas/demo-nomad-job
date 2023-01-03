@@ -1,4 +1,8 @@
 job "turisapps_web_prod" {
+    
+    meta {
+        run_uuid = "${uuidv4()}"
+    }
 
     datacenters = ["dc1"]
 
