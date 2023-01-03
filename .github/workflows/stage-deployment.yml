@@ -27,6 +27,7 @@ jobs:
           hectormedinanubosas/demo-nomad-job:latest
           hectormedinanubosas/demo-nomad-job:${{ github.sha }}
     - name: Get valid json from hcl file.
+      id: valid_json
       run: |
         export payload=$(jq -Rsc '{JobHCL: ., Canonicalize: true}' nomad/stage/app.hcl)
         export payload_json=$(curl -H 'Content-Type: application/json'  \
@@ -36,7 +37,7 @@ jobs:
         payload_json: "$payload_json"
     - name: Update nomad job.
       run: |
-        echo "${{ env.payload_json }}"
+        echo "${{steps.valid_json.outputs.payload_json}}"
         export http_code=$(curl --write-out '%{http_code}' --silent --output /dev/null \
                                   -H 'Content-Type: application/json'  \
                                   -X POST \
