@@ -1,4 +1,4 @@
-name: Stage deployment
+name: Production deployment
 
 on:
   pull_request:
