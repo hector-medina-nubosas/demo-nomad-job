@@ -6,7 +6,7 @@ job "turisapps_web_stage" {
         count = 1
         network {
             port "turisapps_web_stage" {
-                static = 8080
+                static = 8081
                 to = 80
             }
         }    

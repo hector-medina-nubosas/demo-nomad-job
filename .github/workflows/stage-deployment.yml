@@ -8,7 +8,7 @@ on:
       - closed
 
 env:
-  environment: "stage"
+  environment: "dev"
 
 jobs:
   Deployment:
