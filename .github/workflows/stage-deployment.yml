@@ -41,7 +41,7 @@ jobs:
                                   http://nomad.hectormedina.es/v1/jobs \
                                   -d "$payload_json"
         )
-      if [ "$http_code" != "200" ]
+        if [ "$http_code" != "200" ]
         then
           echo "::warning::HTTP status code from grafana API: $CODE"
         fi
