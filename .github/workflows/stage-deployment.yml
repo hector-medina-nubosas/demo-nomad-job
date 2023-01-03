@@ -28,8 +28,9 @@ jobs:
           hectormedinanubosas/demo-nomad-job:${{ github.sha }}
     - name: Use JQ to get valid json to parse.
       uses: sergeysova/jq-action@v2
+      id: jq
       with:
-        cmd: jq -Rsc '{JobHCL: ., Canonicalize: true}' nomad/stage/app.hcl
+        cmd: "jq -Rsc '{JobHCL: ., Canonicalize: true}' nomad/stage/app.hcl"
     - name: Convert hcl to json
       run: |
         export status_code=$(curl --write-out '%(http_code)' --silent --output /dev/null \
