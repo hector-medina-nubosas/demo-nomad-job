@@ -3,12 +3,12 @@ name: Stage deployment
 on:
   pull_request:
     branches:
-      - stage 
+      - main 
     types:
       - closed
 
 env:
-  environment: "stage"
+  environment: "prod"
 
 jobs:
   Deployment:

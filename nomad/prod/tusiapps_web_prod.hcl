@@ -1,21 +1,21 @@
-job "php" {
+job "turisapps_web_prod" {
 
     datacenters = ["dc1"]
 
-    group "php" {
+    group "turisapps_web_prod" {
         count = 1
         network {
-            port "php" {
+            port "turisapps_web_prod" {
                 static = 8080
                 to = 80
             }
         }    
 
-        task "php" {
+        task "turisapps_web_prod" {
             driver = "docker"
             config {
-                image = "hectormedinanubosas/demo-nomad-job:latest"
-                ports = [ "php" ]
+                image = "hectormedinanubosas/demo-nomad-job:prod_latest"
+                ports = [ "turisapps_web_prod" ]
                 force_pull = true
             }
 
