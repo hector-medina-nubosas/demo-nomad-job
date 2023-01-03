@@ -8,7 +8,7 @@ on:
       - closed
 
 jobs:
-  Build_and_push_to_registry:
+  Deployment:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-22.04
     steps:
