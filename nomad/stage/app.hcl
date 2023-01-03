@@ -14,7 +14,7 @@ job "php" {
         task "php" {
             driver = "docker"
             config {
-                image = "php:7.2-apache"
+                image = "hectormedinanubosas/demo-nomad-job:latest"
                 ports = [ "php" ]
             }
 
