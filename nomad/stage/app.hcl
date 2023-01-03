@@ -16,6 +16,7 @@ job "php" {
             config {
                 image = "hectormedinanubosas/demo-nomad-job:latest"
                 ports = [ "php" ]
+                force_pull = true
             }
 
             resources {
