@@ -26,3 +26,18 @@ jobs:
         tags: |
           hectormedinanubosas/demo-nomad-job:latest
           hectormedinanubosas/demo-nomad-job:${{ github.sha }}
+  Deploy_to_Nomad_cluster:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Convert hcl to json
+      run: |
+        export status_code=$(curl --write-out '%(http_code)' --silent --output /dev/null \
+                                  -H 'Content-Type: application/json'  \
+                                  -X POST \
+                                  http://nomad.hectormedina.es/v1/jobs/parse \
+                                  -d @{{ github.repository }}/nomad/stage/php.hcl
+        )
+        echo "::warning::HTTP status code from grafana API: $CODE"
+
+
