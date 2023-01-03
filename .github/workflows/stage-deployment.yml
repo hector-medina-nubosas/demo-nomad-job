@@ -32,15 +32,16 @@ jobs:
         export payload_json=$(curl -H 'Content-Type: application/json'  \
                                    -X POST http://nomad.hectormedina.es/v1/jobs/parse \
                                    -d "$payload")
-        echo "variable=$payload_json" >> $GITHUB_ENV
+        echo "payload_json=$payload_json" >> $GITHUB_ENV
     - name: Update nomad job.
       run: |
-        echo ${{ env.variable }}
+        echo ${{ env.payload_json }}
         export http_code=$(curl --write-out '%{http_code}' --silent --output /dev/null \
                                   -H 'Content-Type: application/json'  \
                                   -X POST \
                                   http://nomad.hectormedina.es/v1/jobs \
-                                  -d "{\"Job\": ${{ env.variable }} }" )
+                                  -d "{\"Job\": ${{ env.payload_json }} }" )
+        echo "$http_code"
         if [ "$http_code" != "200" ]
         then
           echo "::error:: Nomad job create HTTP response code : $CODE"
