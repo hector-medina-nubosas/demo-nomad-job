@@ -26,23 +26,23 @@ jobs:
         tags: |
           hectormedinanubosas/demo-nomad-job:latest
           hectormedinanubosas/demo-nomad-job:${{ github.sha }}
-    - name: test jq native
+    - name: Get valid json from hcl file.
       run: |
-        jq -Rsc '{JobHCL: ., Canonicalize: true}' nomad/stage/app.hcl
-    
-    - name: Use JQ to get valid json to parse.
-      uses: sergeysova/jq-action@v2
-      id: jq
-      with:
-        cmd: "jq -Rsc '{JobHCL: ., Canonicalize: true}' nomad/stage/app.hcl"
-    - name: Convert hcl to json
-      run: |
-        export status_code=$(curl --write-out '%(http_code)' --silent --output /dev/null \
+        export payload=$(jq -Rsc '{JobHCL: ., Canonicalize: true}' nomad/stage/app.hcl)
+        export payload_json=$(curl -H 'Content-Type: application/json'  \
+                                   -X POST http://nomad.hectormedina.es/v1/jobs/parse \
+                                   -d "$payload"
+        )
+    - name: Update nomad job.
+      run |
+        export http_code=$(curl --write-out '%(http_code)' --silent --output /dev/null \
                                   -H 'Content-Type: application/json'  \
                                   -X POST \
-                                  http://nomad.hectormedina.es/v1/jobs/parse \
-                                  -d @{{ github.repository }}/nomad/stage/php.hcl
+                                  http://nomad.hectormedina.es/v1/jobs \
+                                  -d "$payload_json"
         )
-        echo "::warning::HTTP status code from grafana API: $CODE"
-
+      if [ "$http_code" != "200" ]
+        then
+          echo "::warning::HTTP status code from grafana API: $CODE"
+        fi
 
