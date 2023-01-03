@@ -34,13 +34,13 @@ jobs:
                                    -d "$payload")
     - name: Update nomad job.
       run: |
-        export http_code=$(curl --write-out '%(http_code)' --silent --output /dev/null \
+        export http_code=$(curl --write-out '%{http_code}' --silent --output /dev/null \
                                   -H 'Content-Type: application/json'  \
                                   -X POST \
                                   http://nomad.hectormedina.es/v1/jobs \
                                   -d "{\"Job\": $payload_json }" )
         if [ "$http_code" != "200" ]
         then
-          echo "::warning:: Nomad job create HTTP response code : $CODE"
+          echo "::error:: Nomad job create HTTP response code : $CODE"
         fi
 
