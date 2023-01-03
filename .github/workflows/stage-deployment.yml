@@ -29,20 +29,19 @@ jobs:
     - name: Get valid json from hcl file.
       id: valid_json
       run: |
-        export payload=$(jq -Rsc '{JobHCL: ., Canonicalize: true}' nomad/stage/app.hcl)
-        export payload_json=$(curl -H 'Content-Type: application/json'  \
+        export PAYLOAD=$(jq -Rsc '{JobHCL: ., Canonicalize: true}' nomad/stage/app.hcl)
+        export PAYLOAD_JSON=$(curl -H 'Content-Type: application/json'  \
                                    -X POST http://nomad.hectormedina.es/v1/jobs/parse \
                                    -d "$payload")
-      env:
-        payload_json: "$payload_json"
+        echo "PAYLOAD_JSON=$(echo $PAYLOAD_JSON)" >> $GITHUB_ENV
     - name: Update nomad job.
       run: |
-        echo "${{steps.valid_json.outputs.payload_json}}"
+        echo ${{ env.PAYLOAD_JSON }}
         export http_code=$(curl --write-out '%{http_code}' --silent --output /dev/null \
                                   -H 'Content-Type: application/json'  \
                                   -X POST \
                                   http://nomad.hectormedina.es/v1/jobs \
-                                  -d "{\"Job\": ${{ env.payload_json }} }" )
+                                  -d "{\"Job\": ${{ env.PAYLOAD_JSON }} }" )
         if [ "$http_code" != "200" ]
         then
           echo "::error:: Nomad job create HTTP response code : $CODE"
