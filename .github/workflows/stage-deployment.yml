@@ -31,7 +31,7 @@ jobs:
         export payload=$(jq -Rsc '{JobHCL: ., Canonicalize: true}' nomad/stage/app.hcl)
         export payload_json=$(curl -H 'Content-Type: application/json'  \
                                    -X POST http://nomad.hectormedina.es/v1/jobs/parse \
-                                   -d "$payload")
+                                   -d "$payload" | jq '.')
         echo "payload_json=$payload_json" >> $GITHUB_ENV
     - name: Update nomad job.
       run: |
@@ -48,3 +48,7 @@ jobs:
           exit 1
         fi
 
+curl -H 'Content-Type: application/json'  \
+                          -X POST \
+                          http://nomad.hectormedina.es/v1/jobs \
+                          -d "{\"Job\": {"Affinities":null,"AllAtOnce":false,"Constraints":null,"ConsulNamespace":"","ConsulToken":"","CreateIndex":0,"Datacenters":["dc1"],"DispatchIdempotencyToken":null,"Dispatched":false,"ID":"php","JobModifyIndex":0,"Meta":null,"Migrate":null,"ModifyIndex":0,"Multiregion":null,"Name":"php","Namespace":"default","NomadTokenID":"","ParameterizedJob":null,"ParentID":"","Payload":null,"Periodic":null,"Priority":50,"Region":"global","Reschedule":null,"Spreads":null,"Stable":false,"Status":"","StatusDescription":"","Stop":false,"SubmitTime":null,"TaskGroups":[{"Affinities":null,"Constraints":null,"Consul":{"Namespace":""},"Count":1,"EphemeralDisk":{"Migrate":false,"SizeMB":300,"Sticky":false},"MaxClientDisconnect":null,"Meta":null,"Migrate":{"HealthCheck":"checks","HealthyDeadline":300000000000,"MaxParallel":1,"MinHealthyTime":10000000000},"Name":"php","Networks":[{"CIDR":"","DNS":null,"Device":"","DynamicPorts":null,"Hostname":"","IP":"","MBits":null,"Mode":"","ReservedPorts":[{"HostNetwork":"","Label":"php","To":80,"Value":8080}]}],"ReschedulePolicy":{"Attempts":0,"Delay":30000000000,"DelayFunction":"exponential","Interval":0,"MaxDelay":3600000000000,"Unlimited":true},"RestartPolicy":{"Attempts":2,"Delay":15000000000,"Interval":1800000000000,"Mode":"fail"},"Scaling":null,"Services":null,"ShutdownDelay":null,"Spreads":null,"StopAfterClientDisconnect":null,"Tasks":[{"Affinities":null,"Artifacts":null,"Config":{"ports":["php"],"image":"php:7.2-apache"},"Constraints":null,"DispatchPayload":null,"Driver":"docker","Env":null,"KillSignal":"","KillTimeout":5000000000,"Kind":"","Leader":false,"Lifecycle":null,"LogConfig":{"MaxFileSizeMB":10,"MaxFiles":10},"Meta":null,"Name":"php","Resources":{"CPU":250,"Cores":0,"Devices":null,"DiskMB":null,"IOPS":null,"MemoryMB":256,"MemoryMaxMB":null,"Networks":null},"RestartPolicy":{"Attempts":2,"Delay":15000000000,"Interval":1800000000000,"Mode":"fail"},"ScalingPolicies":null,"Services":null,"ShutdownDelay":0,"Templates":null,"User":"","Vault":null,"VolumeMounts":null}],"Update":{"AutoPromote":false,"AutoRevert":false,"Canary":0,"HealthCheck":"checks","HealthyDeadline":300000000000,"MaxParallel":1,"MinHealthyTime":10000000000,"ProgressDeadline":600000000000,"Stagger":30000000000},"Volumes":null}],"Type":"service","Update":{"AutoPromote":false,"AutoRevert":false,"Canary":0,"HealthCheck":"checks","HealthyDeadline":300000000000,"MaxParallel":1,"MinHealthyTime":10000000000,"ProgressDeadline":600000000000,"Stagger":30000000000},"VaultNamespace":"","VaultToken":"","Version":0} }"
