@@ -33,7 +33,7 @@ jobs:
         export PAYLOAD_JSON=$(curl -H 'Content-Type: application/json'  \
                                    -X POST http://nomad.hectormedina.es/v1/jobs/parse \
                                    -d "$payload")
-        echo "PAYLOAD_JSON=$(echo $PAYLOAD_JSON)" >> $GITHUB_ENV
+        echo "PAYLOAD_JSON=${PAYLOAD_JSON}" >> $GITHUB_ENV
     - name: Update nomad job.
       run: |
         echo ${{ env.PAYLOAD_JSON }}
