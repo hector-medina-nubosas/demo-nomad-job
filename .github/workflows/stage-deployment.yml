@@ -32,8 +32,11 @@ jobs:
         export payload_json=$(curl -H 'Content-Type: application/json'  \
                                    -X POST http://nomad.hectormedina.es/v1/jobs/parse \
                                    -d "$payload")
+        echo "$payload"
+        echo "$payload_json"
     - name: Update nomad job.
       run: |
+        echo "$payload_json"
         export http_code=$(curl --write-out '%{http_code}' --silent --output /dev/null \
                                   -H 'Content-Type: application/json'  \
                                   -X POST \
@@ -42,5 +45,7 @@ jobs:
         if [ "$http_code" != "200" ]
         then
           echo "::error:: Nomad job create HTTP response code : $CODE"
+          # Fail the job.
+          exit 1
         fi
 
