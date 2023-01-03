@@ -28,15 +28,19 @@ jobs:
           hectormedinanubosas/demo-nomad-job:${{ github.sha }}
     - name: Update nomad job.
       run: |
+        # Prepare hcl file.
         export payload=$(jq -Rsc '{JobHCL: ., Canonicalize: true}' nomad/stage/app.hcl)
+        # Get the json file.
         export payload_json=$(curl -H 'Content-Type: application/json'  \
                                    -X POST http://nomad.hectormedina.es/v1/jobs/parse \
                                    -d "$payload")
-        export http_code=$(curl -H 'Content-Type: application/json'  \
+        # Update job with json.
+        export http_code=$(curl --write-out '%{http_code}' --silent --output /dev/null \
+                                -H 'Content-Type: application/json'  \
                                 -X POST \
                                 http://nomad.hectormedina.es/v1/jobs \
                                 -d "{\"Job\": $payload_json }" )
-        echo "$http_code"
+        # Check if update was successful. 
         if [ "$http_code" != "200" ]
         then
           echo "::error:: Nomad job create HTTP response code : $CODE"
