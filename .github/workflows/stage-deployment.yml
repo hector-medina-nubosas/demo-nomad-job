@@ -38,7 +38,7 @@ jobs:
         export http_code=$(curl --write-out '%{http_code}' --silent --output /dev/null \
                                 -H 'Content-Type: application/json'  \
                                 -X POST \
-                                http://nomad.hectormedina.es/v1/jobs \
+                                http://nomad.hectormedina.es/v1/jobs/php \
                                 -d "{\"Job\": $payload_json }" )
         # Check if update was successful. 
         if [ "$http_code" != "200" ]
