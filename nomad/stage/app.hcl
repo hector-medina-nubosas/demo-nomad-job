@@ -1,10 +1,11 @@
 job "php" {
 
     datacenters = ["dc1"]
+
     group "php" {
         count = 1
         network {
-            port "phpport"{
+            port "php" {
                 static = 8080
                 to = 80
             }
@@ -14,7 +15,7 @@ job "php" {
             driver = "docker"
             config {
                 image = "php:7.2-apache"
-                ports = [ "phpport" ]
+                ports = [ "php" ]
             }
 
             resources {
