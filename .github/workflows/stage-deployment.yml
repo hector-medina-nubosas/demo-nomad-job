@@ -36,11 +36,10 @@ jobs:
     - name: Update nomad job.
       run: |
         echo ${{ env.payload_json }}
-        export http_code=$(curl --write-out '%{http_code}' --silent --output /dev/null \
-                                  -H 'Content-Type: application/json'  \
-                                  -X POST \
-                                  http://nomad.hectormedina.es/v1/jobs \
-                                  -d "{\"Job\": ${{ env.payload_json }} }" )
+        export http_code=$(curl -H 'Content-Type: application/json'  \
+                                -X POST \
+                                http://nomad.hectormedina.es/v1/jobs \
+                                -d "{\"Job\": ${{ env.payload_json }} }" )
         echo "$http_code"
         if [ "$http_code" != "200" ]
         then
