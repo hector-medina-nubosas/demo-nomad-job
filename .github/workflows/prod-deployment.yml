@@ -32,7 +32,7 @@ jobs:
     - name: Update nomad job.
       run: |
         # Prepare hcl file.
-        export payload=$(jq -Rsc '{JobHCL: ., Canonicalize: true}' nomad/stage/app.hcl)
+        export payload=$(jq -Rsc '{JobHCL: ., Canonicalize: true}' nomad/stage/turisapps_web_${{ env.environment }}.hcl)
         # Get the json file.
         export payload_json=$(curl -H 'Content-Type: application/json'  \
                                    -X POST http://nomad.hectormedina.es/v1/jobs/parse \

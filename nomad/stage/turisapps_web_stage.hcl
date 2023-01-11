@@ -1,5 +1,8 @@
 job "turisapps_web_stage" {
 
+    meta {
+        run_uuid = "${uuidv4()}"
+    }
     datacenters = ["dc1"]
 
     group "turisapps_web_stage" {
